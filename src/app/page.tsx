@@ -87,25 +87,29 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
-      <div className="max-w-6xl mx-auto px-4 py-8">
-        {/* ヘッダー */}
-        <header className="text-center mb-8">
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-            ClipStamp
-          </h1>
-          <p className="mt-2 text-gray-400">
-            画像をクリックしてクリップボードにコピー 📋
-          </p>
+      <div className="max-w-6xl mx-auto px-4 py-4">
+        {/* ヘッダー（コンパクト版） */}
+        <header className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-3">
+            <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+              ClipStamp
+            </h1>
+            <span className="text-sm text-gray-500 hidden sm:inline">📋 クリックでコピー</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <UploadArea onImageAdd={handleImageAdd} />
+            <div className="flex items-center gap-1.5 text-gray-400">
+              <span className="text-xs">or</span>
+              <kbd className="px-2 py-1 text-xs font-mono bg-gray-700 border border-gray-600 rounded">Ctrl</kbd>
+              <span className="text-xs">+</span>
+              <kbd className="px-2 py-1 text-xs font-mono bg-gray-700 border border-gray-600 rounded">V</kbd>
+            </div>
+          </div>
         </header>
 
-        {/* アップロードエリア */}
-        <section className="mb-8">
-          <UploadArea onImageAdd={handleImageAdd} />
-        </section>
-
         {/* 画像カウント */}
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold text-gray-200">
+        <div className="flex items-center justify-between mb-3">
+          <h2 className="text-sm font-medium text-gray-400">
             保存済みスタンプ
           </h2>
           <span className="text-sm text-gray-500">

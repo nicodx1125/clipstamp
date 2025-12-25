@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useCallback, DragEvent, ChangeEvent } from 'react';
+import { useRef, useCallback, DragEvent, ChangeEvent, useState } from 'react';
 
 interface UploadAreaProps {
     onImageAdd: (base64: string) => void;
@@ -8,6 +8,7 @@ interface UploadAreaProps {
 
 export function UploadArea({ onImageAdd }: UploadAreaProps) {
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const [isDragOver, setIsDragOver] = useState(false);
 
     // ファイルをBase64に変換
     const fileToBase64 = useCallback((file: File): Promise<string> => {
@@ -42,21 +43,31 @@ export function UploadArea({ onImageAdd }: UploadAreaProps) {
     };
 
     // ドラッグ＆ドロップ
-    const handleDrop = (e: DragEvent<HTMLDivElement>) => {
+    const handleDrop = (e: DragEvent<HTMLButtonElement>) => {
         e.preventDefault();
+        setIsDragOver(false);
         handleFiles(e.dataTransfer.files);
     };
 
-    const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
+    const handleDragOver = (e: DragEvent<HTMLButtonElement>) => {
         e.preventDefault();
+        setIsDragOver(true);
+    };
+
+    const handleDragLeave = () => {
+        setIsDragOver(false);
     };
 
     return (
-        <div
+        <button
             onDrop={handleDrop}
             onDragOver={handleDragOver}
-            className="w-full p-8 border-2 border-dashed border-gray-600 rounded-2xl bg-gray-800/50 hover:bg-gray-700/50 hover:border-gray-500 transition-colors cursor-pointer text-center"
+            onDragLeave={handleDragLeave}
             onClick={() => fileInputRef.current?.click()}
+            className={`px-4 py-2 rounded-xl font-medium transition-all flex items-center gap-2 ${isDragOver
+                    ? 'bg-purple-500 text-white scale-105'
+                    : 'bg-gray-700 hover:bg-gray-600 text-gray-200'
+                }`}
         >
             <input
                 ref={fileInputRef}
@@ -66,35 +77,21 @@ export function UploadArea({ onImageAdd }: UploadAreaProps) {
                 onChange={handleFileChange}
                 className="hidden"
             />
-            <div className="flex flex-col items-center gap-3">
-                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center">
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={2}
-                        stroke="white"
-                        className="w-8 h-8"
-                    >
-                        <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M12 4.5v15m7.5-7.5h-15"
-                        />
-                    </svg>
-                </div>
-                <div>
-                    <p className="text-lg font-semibold text-gray-200">
-                        画像をドラッグ＆ドロップ
-                    </p>
-                    <p className="text-sm text-gray-400 mt-1">
-                        またはクリックしてファイルを選択
-                    </p>
-                    <p className="text-sm text-gray-500 mt-2">
-                        💡 Ctrl+V でクリップボードから貼り付けも可能
-                    </p>
-                </div>
-            </div>
-        </div>
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={2}
+                stroke="currentColor"
+                className="w-5 h-5"
+            >
+                <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M12 4.5v15m7.5-7.5h-15"
+                />
+            </svg>
+            <span className="hidden sm:inline">画像を追加</span>
+        </button>
     );
 }
