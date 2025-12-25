@@ -48,10 +48,16 @@ export function useImageStore() {
         setImages((prev) => prev.filter((img) => img.id !== id));
     }, []);
 
+    // 画像を並び替え
+    const reorderImages = useCallback((newImages: StampImage[]) => {
+        setImages(newImages);
+    }, []);
+
     return {
         images,
         isLoaded,
         addImage,
         removeImage,
+        reorderImages,
     };
 }

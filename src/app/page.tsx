@@ -8,7 +8,7 @@ import { ImageGrid } from '@/components/ImageGrid';
 import { ConfirmModal } from '@/components/ConfirmModal';
 
 export default function Home() {
-  const { images, isLoaded, addImage, removeImage } = useImageStore();
+  const { images, isLoaded, addImage, removeImage, reorderImages } = useImageStore();
   const { toast, showToast } = useToast();
   const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
 
@@ -123,6 +123,7 @@ export default function Home() {
             images={images}
             onRemove={handleDeleteRequest}
             onCopy={copyToClipboard}
+            onReorder={reorderImages}
           />
         </section>
       </div>
