@@ -15,6 +15,10 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "ClipStamp - 画像スタンプアプリ",
   description: "画像をクリックしてクリップボードにコピー、チャットでスタンプとして送信",
+  icons: {
+    icon: "/favicon.png",
+    apple: "/favicon.png",
+  },
 };
 
 export default function RootLayout({
