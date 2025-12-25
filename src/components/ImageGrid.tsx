@@ -37,7 +37,7 @@ export function ImageGrid({ images, onRemove, onCopy }: ImageGridProps) {
             {images.map((image) => (
                 <div
                     key={image.id}
-                    className="relative aspect-square rounded-xl overflow-hidden bg-white shadow-md hover:shadow-xl transition-shadow cursor-pointer group"
+                    className="relative aspect-square rounded-xl overflow-hidden bg-gray-800 shadow-md hover:shadow-xl hover:shadow-purple-500/10 transition-shadow cursor-pointer group border border-gray-700"
                     onMouseEnter={() => setHoveredId(image.id)}
                     onMouseLeave={() => setHoveredId(null)}
                     onClick={() => handleCopy(image)}

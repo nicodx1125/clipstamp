@@ -55,7 +55,7 @@ export function UploadArea({ onImageAdd }: UploadAreaProps) {
         <div
             onDrop={handleDrop}
             onDragOver={handleDragOver}
-            className="w-full p-8 border-2 border-dashed border-gray-300 rounded-2xl bg-gray-50 hover:bg-gray-100 hover:border-gray-400 transition-colors cursor-pointer text-center"
+            className="w-full p-8 border-2 border-dashed border-gray-600 rounded-2xl bg-gray-800/50 hover:bg-gray-700/50 hover:border-gray-500 transition-colors cursor-pointer text-center"
             onClick={() => fileInputRef.current?.click()}
         >
             <input
@@ -84,13 +84,13 @@ export function UploadArea({ onImageAdd }: UploadAreaProps) {
                     </svg>
                 </div>
                 <div>
-                    <p className="text-lg font-semibold text-gray-700">
+                    <p className="text-lg font-semibold text-gray-200">
                         画像をドラッグ＆ドロップ
                     </p>
-                    <p className="text-sm text-gray-500 mt-1">
+                    <p className="text-sm text-gray-400 mt-1">
                         またはクリックしてファイルを選択
                     </p>
-                    <p className="text-sm text-gray-400 mt-2">
+                    <p className="text-sm text-gray-500 mt-2">
                         💡 Ctrl+V でクリップボードから貼り付けも可能
                     </p>
                 </div>

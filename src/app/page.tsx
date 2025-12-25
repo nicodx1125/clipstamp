@@ -1,14 +1,16 @@
 'use client';
 
-import { useEffect, useCallback } from 'react';
+import { useEffect, useCallback, useState } from 'react';
 import { useImageStore } from '@/hooks/useImageStore';
 import { Toast, useToast } from '@/components/Toast';
 import { UploadArea } from '@/components/UploadArea';
 import { ImageGrid } from '@/components/ImageGrid';
+import { ConfirmModal } from '@/components/ConfirmModal';
 
 export default function Home() {
   const { images, isLoaded, addImage, removeImage } = useImageStore();
   const { toast, showToast } = useToast();
+  const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
 
   // 画像をクリップボードにコピー
   const copyToClipboard = useCallback(async (base64: string) => {
@@ -56,29 +58,42 @@ export default function Home() {
     showToast('✅ 画像を追加しました！');
   }, [addImage, showToast]);
 
-  // 画像削除時のハンドラー
-  const handleImageRemove = useCallback((id: string) => {
-    removeImage(id);
-    showToast('🗑️ 画像を削除しました');
-  }, [removeImage, showToast]);
+  // 削除確認モーダルを開く
+  const handleDeleteRequest = useCallback((id: string) => {
+    setDeleteTargetId(id);
+  }, []);
+
+  // 削除を確定
+  const handleDeleteConfirm = useCallback(() => {
+    if (deleteTargetId) {
+      removeImage(deleteTargetId);
+      showToast('🗑️ 画像を削除しました');
+      setDeleteTargetId(null);
+    }
+  }, [deleteTargetId, removeImage, showToast]);
+
+  // 削除をキャンセル
+  const handleDeleteCancel = useCallback(() => {
+    setDeleteTargetId(null);
+  }, []);
 
   if (!isLoaded) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-purple-50">
-        <div className="text-xl text-gray-500">読み込み中...</div>
+      <div className="min-h-screen flex items-center justify-center bg-gray-900">
+        <div className="text-xl text-gray-400">読み込み中...</div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
       <div className="max-w-6xl mx-auto px-4 py-8">
         {/* ヘッダー */}
         <header className="text-center mb-8">
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
             ClipStamp
           </h1>
-          <p className="mt-2 text-gray-600">
+          <p className="mt-2 text-gray-400">
             画像をクリックしてクリップボードにコピー 📋
           </p>
         </header>
@@ -90,7 +105,7 @@ export default function Home() {
 
         {/* 画像カウント */}
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold text-gray-700">
+          <h2 className="text-lg font-semibold text-gray-200">
             保存済みスタンプ
           </h2>
           <span className="text-sm text-gray-500">
@@ -102,11 +117,20 @@ export default function Home() {
         <section>
           <ImageGrid
             images={images}
-            onRemove={handleImageRemove}
+            onRemove={handleDeleteRequest}
             onCopy={copyToClipboard}
           />
         </section>
       </div>
+
+      {/* 削除確認モーダル */}
+      <ConfirmModal
+        isOpen={deleteTargetId !== null}
+        title="画像を削除"
+        message="このスタンプを削除しますか？この操作は取り消せません。"
+        onConfirm={handleDeleteConfirm}
+        onCancel={handleDeleteCancel}
+      />
 
       {/* トースト通知 */}
       <Toast message={toast.message} visible={toast.visible} />
